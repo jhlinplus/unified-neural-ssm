@@ -1,0 +1,43 @@
+[project]
+name = "review-dl-ssm"
+version = "0.0.0"
+description = "Experimental comparison code for deep-learning state-space models"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "ipykernel==6.29.5",
+    "jupyterlab==4.2.5",
+    "lightning==2.5.1.post0",
+    "matplotlib==3.8.4",
+    "numpy==2.4.2",
+    "pandas==3.0.1",
+    "pre-commit>=4,<5",
+    "pytest==9.0.2",
+    "scipy==1.17.1",
+    "tensorboard==2.17.0",
+    "torch==2.4.0",
+    "torchdiffeq==0.2.5",
+    "torchmetrics==1.4.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    "legacy",
+    "output",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "W",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
