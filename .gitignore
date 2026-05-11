@@ -17,7 +17,11 @@ venv/
 .codex/
 .agents/
 
+rsync.sh
+
 legacy/*
 output/*
 
-demo/archive
+demo/*
+!demo/eval.py
+!demo/demo.ipynb

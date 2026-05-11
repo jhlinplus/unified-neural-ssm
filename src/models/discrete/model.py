@@ -1,9 +1,9 @@
 import torch
 
-from ..configs.discrete import DiscreteModelConfig, DiscreteOptConfig
-from .base import LightningBase
 from ...losses import ELBO
-from ..modules import LatentDiscreteModel
+from ..base import LightningBase
+from .config import DiscreteModelConfig, DiscreteOptConfig
+from .network import LatentDiscreteModel
 
 
 class DiscreteSSM(LightningBase):

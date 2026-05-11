@@ -1,8 +1,8 @@
-from .lightning import DiscreteSSM, LightningBase, ODESSM, SDESSM
-from .configs.discrete import DiscreteModelConfig, DiscreteOptConfig
-from .configs.ode import ODEModelConfig, ODEOptConfig
-from .configs.sde import SDEModelConfig, SDEOptConfig
-from .configs.trainer import TrainerConfig
+from .base import LightningBase
+from .common import TrainerConfig
+from .discrete import DiscreteModelConfig, DiscreteOptConfig, DiscreteSSM
+from .ode import ODEModelConfig, ODEOptConfig, ODESSM
+from .sde import SDEModelConfig, SDEOptConfig, SDESSM
 
 __all__ = [
     "LightningBase",

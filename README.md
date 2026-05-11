@@ -32,7 +32,12 @@ bash setup.sh
 ```text
 unified-neural-ssm/
 ├── src/
-│   ├── models/         # Core model implementations, configs, and Lightning wrappers
+│   ├── models/
+│   │   ├── base.py     # Shared Lightning base
+│   │   ├── common/     # Shared config and NN/runtime components
+│   │   ├── discrete/   # Discrete model config, network, and Lightning wrapper
+│   │   ├── ode/        # ODE model config, network, and Lightning wrapper
+│   │   └── sde/        # SDE model config, network, and Lightning wrapper
 │   ├── data/           # Torch dataset construction, trajectory partitioning, and batch collation
 │   ├── losses/         # Reconstruction and KL/objective code used by the model trainers
 │   └── utils/          # Shared training/runtime helpers

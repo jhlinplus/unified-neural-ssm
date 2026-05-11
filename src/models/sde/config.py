@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .trainer import TrainerConfig
+from ..common.config import TrainerConfig
 
 @dataclass(frozen=True)
-class ODEModelConfig:
+class SDEModelConfig:
     # Shared across encoder / latent transition / observation decoder
     dim_obs: int
     dim_latent: int
@@ -16,16 +16,24 @@ class ODEModelConfig:
     enc_proj_dim: int
 
     # Latent transition
-    ode_net_hidden_dim: int | list[int]
+    drift_net_hidden_dim: int | list[int]
+    diffusion_net_hidden_dim: int | list[int]
 
     # Observation decoder
     dec_hidden_dim: int | list[int]
     x_sigma2: float
     # Shared regularization across encoder / latent transition / observation decoder
     dropout: float = 0.0
+    # Shared latent covariance parameterization for posterior encoder and transition diffusion.
+    z_sigma_type: str = "diag"
     enc_direction: str = "backward"
 
     def __post_init__(self):
+        if self.z_sigma_type not in ("const", "diag", "full"):
+            raise ValueError(
+                f"Unsupported z_sigma_type={self.z_sigma_type}. "
+                "Expected one of {'const', 'diag', 'full'}."
+            )
         if self.enc_direction not in {"forward", "backward"}:
             raise ValueError(
                 f"Unsupported enc_direction={self.enc_direction}. "
@@ -34,22 +42,17 @@ class ODEModelConfig:
 
 
 @dataclass(frozen=True)
-class ODEOptConfig(TrainerConfig):
-    loss_mode: str = "iwae"
+class SDEOptConfig(TrainerConfig):
     loss_type: str = "NLL"
     loss_reduction: str = "mean"
-    train_strategy: str = "predict"
-    mc_samples: int = 1
+    train_strategy: str = "reconstruct"
+    kl_mode: str = "mc"
+    mc_samples: int = 0
     beta_max: float = 1.0
-    warmup_epochs: int = 10
+    warmup_epochs: int | None = None
 
     def __post_init__(self):
         super().__post_init__()
-        if self.loss_mode not in {"elbo", "iwae"}:
-            raise ValueError(
-                f"Unsupported loss_mode={self.loss_mode}. "
-                "Expected one of {'elbo', 'iwae'}."
-            )
         if self.loss_type not in {"MSE", "NLL"}:
             raise ValueError(
                 f"Unsupported loss_type={self.loss_type}. "
@@ -60,11 +63,14 @@ class ODEOptConfig(TrainerConfig):
                 f"Unsupported loss_reduction={self.loss_reduction}. "
                 "Expected one of {'mean', 'sum'}."
             )
-        if self.train_strategy not in {"predict", "reconstruct"}:
+        if self.train_strategy != "reconstruct":
             raise ValueError(
-                f"Unsupported train_strategy={self.train_strategy}. "
-                "Expected one of {'predict', 'reconstruct'}."
+                f"SDEOptConfig only supports train_strategy='reconstruct', got {self.train_strategy!r}."
+            )
+        if self.kl_mode not in {"mc", "exact", "vae"}:
+            raise ValueError(
+                f"Unsupported kl_mode={self.kl_mode}. "
+                "Expected one of {'mc', 'exact', 'vae'}."
             )
         if self.mc_samples < 0:
             raise ValueError(f"mc_samples must be >= 0, got {self.mc_samples}.")
-

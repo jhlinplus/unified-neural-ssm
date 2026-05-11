@@ -22,8 +22,8 @@ Batch tensors:
 
 Code:
 
-- `src/models/discrete.py`
-- `src/models/modules/latent_discrete.py`
+- `src/models/discrete/model.py`
+- `src/models/discrete/network.py`
 
 ### 2.1 Data Generating Process
 
@@ -113,8 +113,8 @@ $$
 
 Code:
 
-- `src/models/ode.py`
-- `src/models/modules/latent_ode.py`
+- `src/models/ode/model.py`
+- `src/models/ode/network.py`
 
 ### 3.1 Data Generating Process
 
@@ -222,8 +222,8 @@ KL term regularizes the initial latent state distribution toward a standard Gaus
 
 Code:
 
-- `src/models/sde.py`
-- `src/models/modules/latent_sde.py`
+- `src/models/sde/model.py`
+- `src/models/sde/network.py`
 
 ### 4.1 Data Generating Process
 
@@ -477,7 +477,7 @@ Across all three models, training follows the same high-level sequence:
 5. Optimize reconstruction and latent regularization terms.
 
 Encoder note:
-- ODE and SDE share a common sequence encoder implementation (`RNNEncoder` in `src/models/modules/common.py`), while Discrete uses its own bidirectional encoder design.
+- ODE and SDE share a common sequence encoder implementation (`RNNEncoder` in `src/models/common/nn.py`), while Discrete uses the bidirectional encoder in the same shared module.
 - In ODE, $z_0$ posterior moments are read from the first encoder-step output; SDE uses per-step posterior outputs across the full context window.
 
 ### 6.2 Loss Handling Across Models

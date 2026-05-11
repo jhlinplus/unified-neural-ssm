@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .trainer import TrainerConfig
+from ..common.config import TrainerConfig
 
 @dataclass(frozen=True)
-class SDEModelConfig:
+class ODEModelConfig:
     # Shared across encoder / latent transition / observation decoder
     dim_obs: int
     dim_latent: int
@@ -16,24 +16,16 @@ class SDEModelConfig:
     enc_proj_dim: int
 
     # Latent transition
-    drift_net_hidden_dim: int | list[int]
-    diffusion_net_hidden_dim: int | list[int]
+    ode_net_hidden_dim: int | list[int]
 
     # Observation decoder
     dec_hidden_dim: int | list[int]
     x_sigma2: float
     # Shared regularization across encoder / latent transition / observation decoder
     dropout: float = 0.0
-    # Shared latent covariance parameterization for posterior encoder and transition diffusion.
-    z_sigma_type: str = "diag"
     enc_direction: str = "backward"
 
     def __post_init__(self):
-        if self.z_sigma_type not in ("const", "diag", "full"):
-            raise ValueError(
-                f"Unsupported z_sigma_type={self.z_sigma_type}. "
-                "Expected one of {'const', 'diag', 'full'}."
-            )
         if self.enc_direction not in {"forward", "backward"}:
             raise ValueError(
                 f"Unsupported enc_direction={self.enc_direction}. "
@@ -42,16 +34,22 @@ class SDEModelConfig:
 
 
 @dataclass(frozen=True)
-class SDEOptConfig(TrainerConfig):
+class ODEOptConfig(TrainerConfig):
+    loss_mode: str = "iwae"
     loss_type: str = "NLL"
     loss_reduction: str = "mean"
-    kl_mode: str = "mc"
-    mc_samples: int = 0
+    train_strategy: str = "predict"
+    mc_samples: int = 1
     beta_max: float = 1.0
-    warmup_epochs: int | None = None
+    warmup_epochs: int = 10
 
     def __post_init__(self):
         super().__post_init__()
+        if self.loss_mode not in {"elbo", "iwae"}:
+            raise ValueError(
+                f"Unsupported loss_mode={self.loss_mode}. "
+                "Expected one of {'elbo', 'iwae'}."
+            )
         if self.loss_type not in {"MSE", "NLL"}:
             raise ValueError(
                 f"Unsupported loss_type={self.loss_type}. "
@@ -62,10 +60,10 @@ class SDEOptConfig(TrainerConfig):
                 f"Unsupported loss_reduction={self.loss_reduction}. "
                 "Expected one of {'mean', 'sum'}."
             )
-        if self.kl_mode not in {"mc", "exact", "vae"}:
+        if self.train_strategy not in {"predict", "reconstruct"}:
             raise ValueError(
-                f"Unsupported kl_mode={self.kl_mode}. "
-                "Expected one of {'mc', 'exact', 'vae'}."
+                f"Unsupported train_strategy={self.train_strategy}. "
+                "Expected one of {'predict', 'reconstruct'}."
             )
         if self.mc_samples < 0:
             raise ValueError(f"mc_samples must be >= 0, got {self.mc_samples}.")

@@ -1,9 +1,9 @@
 import torch
 
-from ..configs.sde import SDEModelConfig, SDEOptConfig
-from .base import LightningBase
 from ...losses import SDEELBO
-from ..modules import LatentSDEModel
+from ..base import LightningBase
+from .config import SDEModelConfig, SDEOptConfig
+from .network import LatentSDEModel
 
 
 class SDESSM(LightningBase):

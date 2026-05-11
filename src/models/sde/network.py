@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from .common import MLP, RNNEncoder, Sampler, GaussianObsDecoder, STD_MIN_SCALE
+from ..common.nn import GaussianObsDecoder, MLP, RNNEncoder, STD_MIN_SCALE, Sampler
 
 
 def _triangle_vec_to_lower(vec: torch.Tensor, dim_z: int) -> torch.Tensor:
