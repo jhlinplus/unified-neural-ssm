@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides a unified research codebase for deep-learning SSMs, facilitating modular experimentation across **Latent Discrete SSM**, **Latent Neural ODE** and **Latent Neural SDE**.
+This repository provides a unified research codebase for deep-learning SSMs, facilitating modular experimentation across **Latent Discrete SSM**, **Latent Neural ODE**, and **Latent Neural SDE**, with a lightweight **nowcast** extension built on the discrete backbone.
 
 The framework is designed to be **lightweight**, implementing only the vanilla backbones of each model family without the overhead of extraneous variants. By utilizing a shared PyTorch Lightning training flow, common torch dataset construction & ingestion, and standardized forward-pass logic, the codebase enforces strict procedural invariance. This ensures that transitions between model families are seamless and comparisons are isolated to the core model formulations.
 
@@ -36,6 +36,7 @@ unified-neural-ssm/
 │   │   ├── base.py     # Shared Lightning base
 │   │   ├── common/     # Shared config and NN/runtime components
 │   │   ├── discrete/   # Discrete model config, network, and Lightning wrapper
+│   │   ├── nowcast/    # Guidance-aware discrete nowcast extension
 │   │   ├── ode/        # ODE model config, network, and Lightning wrapper
 │   │   └── sde/        # SDE model config, network, and Lightning wrapper
 │   ├── data/           # Torch dataset construction, trajectory partitioning, and batch collation
@@ -44,6 +45,7 @@ unified-neural-ssm/
 ├── demo/
 │   ├── README.md       # Practitioner guide for the demo workflow
 │   ├── demo.ipynb      # Main end-to-end walkthrough notebook
+│   ├── nowcast.ipynb     # Focused nowcast experimentation notebook
 │   └── lorenz96.py     # Demo-only synthetic data generator
 ├── docs/
 │   ├── README.md       # Formulation and implementation notes
@@ -58,7 +60,7 @@ For most users, the practical workflow is:
 
 - build samples with `TSDataset` or `TrajDataset`
 - create `DataLoader` objects and use `prepare_batched_traj` as the collate function when you need aligned batches
-- train `DiscreteSSM`, `ODESSM`, or `SDESSM`
+- train `DiscreteSSM`, `NowcastSSM`, `ODESSM`, or `SDESSM`
 - inspect fitted latent trajectories with `smooth` and generate forecasts with `forecast_from_context`
 
 Start with:

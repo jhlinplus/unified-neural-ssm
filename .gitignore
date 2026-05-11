@@ -25,3 +25,4 @@ output/*
 demo/*
 !demo/eval.py
 !demo/demo.ipynb
+!demo/nowcast.ipynb

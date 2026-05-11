@@ -1,7 +1,9 @@
-from .models import DiscreteSSM, ODESSM, SDESSM
+from .models import DiscreteSSM, NowcastSSM, ODESSM, SDESSM
 from .models import (
     DiscreteModelConfig,
     DiscreteOptConfig,
+    NowcastModelConfig,
+    NowcastOptConfig,
     ODEModelConfig,
     ODEOptConfig,
     SDEModelConfig,
