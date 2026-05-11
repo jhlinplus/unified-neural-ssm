@@ -4,6 +4,7 @@ This folder contains the demo notebook and the helper code used by that notebook
 
 ## Files
 - [demo.ipynb](./demo.ipynb): end-to-end experiment on synthetic trajectories
+- [nowcast.ipynb](./nowcast.ipynb): focused notebook for guidance-based nowcast experiments
 - `lorenz96.py`: Lorenz-96 simulator used to generate the demo data
 
 ## End-To-End Workflow
@@ -14,6 +15,7 @@ The demo follows the same backbone for the supported model families.
 Use `TSDataset(...)` when you start from one long time series and want the repo to partition it into windows. Use `TrajDataset(...)` when you already have trajectory windows or trajectory segments.
 3. Create `DataLoader` objects and use `prepare_batched_traj(...)` as the `collate_fn`.
 4. Choose one model family and its matching config pair.
+`NowcastSSM` follows the same high-level workflow as the other sequence models, but uses same-step guidance masks during reconstruction/forecast experiments.
 5. Train with `configure_trainer(...)` and `trainer.fit(...)`.
 6. After training, use `smooth(...)` for latent inference on the observed context and `forecast_from_context(...)` for future prediction. Use `reconstruct(...)` only when you want in-sample fit diagnostics or visualization.
 
