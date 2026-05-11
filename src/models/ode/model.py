@@ -1,9 +1,9 @@
 import torch
 
-from ..configs.ode import ODEModelConfig, ODEOptConfig
-from .base import LightningBase
 from ...losses import ODELoss
-from ..modules import LatentODEModel
+from ..base import LightningBase
+from .config import ODEModelConfig, ODEOptConfig
+from .network import LatentODEModel
 
 
 class ODESSM(LightningBase):

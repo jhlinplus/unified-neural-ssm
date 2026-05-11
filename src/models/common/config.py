@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class TrainerConfig:
     n_epochs: int
@@ -15,13 +16,10 @@ class TrainerConfig:
     gradient_accumulation_steps: int = 1
     early_stopping: int | None = None
 
-    # ReduceLROnPlateau
     factor: float | None = None
     patience: int | None = None
-    # StepLR
     step_size: int | None = None
     gamma: float = 0.5
-    # MultiStepLR
     milestones: list[int] | None = None
 
     def __post_init__(self):

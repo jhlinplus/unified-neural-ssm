@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torchdiffeq import odeint
 
-from .common import MLP, RNNEncoder, Sampler, GaussianObsDecoder
+from ..common.nn import GaussianObsDecoder, MLP, RNNEncoder, Sampler
 
 ODEINT_ATOL = 1e-5
 ODEINT_RTOL = 1e-4

@@ -7,7 +7,7 @@ This folder contains the demo notebook and the helper code used by that notebook
 - `lorenz96.py`: Lorenz-96 simulator used to generate the demo data
 
 ## End-To-End Workflow
-The demo follows the same backbone for all three model families.
+The demo follows the same backbone for the supported model families.
 
 1. Generate or load time-series data.
 2. Build a dataset:
